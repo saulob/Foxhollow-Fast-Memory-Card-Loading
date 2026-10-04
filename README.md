@@ -33,15 +33,33 @@ mods/
     lib/
       windows-amd64/
         mod.dll
+      linux-amd64/
+        mod.so
+      linux-arm64/
+        mod.so
+      macos-x86_64/
+        mod.so
+      macos-arm64/
+        mod.so
 ```
+
+Foxhollow only loads the library in the folder that matches your system and ignores the others, so you only need the folder for your platform.
 
 Restart the game after installing.
 
 ## Platform support
 
-- Windows x64
+| Platform | Folder | Status |
+| --- | --- | --- |
+| Windows x64 | `windows-amd64` | Tested in game |
+| Linux x86_64 | `linux-amd64` | Build validated, in-game testing pending |
+| Linux ARM64 | `linux-arm64` | Build validated by GitHub Actions, in-game testing pending |
+| macOS Apple Silicon | `macos-arm64` | Build validated by GitHub Actions, in-game testing pending |
+| macOS Intel | `macos-x86_64` | Build validated by GitHub Actions, in-game testing pending |
 
-Other Foxhollow platforms are not supported by this mod yet.
+Official Foxhollow builds are currently published for Windows x64, Linux x86_64 and macOS Apple Silicon. The Linux ARM64 and macOS Intel libraries are for Foxhollow builds you compile yourself. Windows on ARM is not supported.
+
+The mod needs no extra libraries on any platform. If the Foxhollow log shows `[Fast Memory Card Loading] disabled: ...`, the mod could not find or patch the game code it needs and left the game unchanged.
 
 ## Repository
 

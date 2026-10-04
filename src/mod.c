@@ -171,7 +171,7 @@ FH_MOD_EXPORT int fh_mod_initialize(FhMod* mod, const FhModHost* host) {
     reset_state();
     return FH_MOD_ERROR;
   }
-  modLog(FH_LOG_INFO, "v1.0.0 loaded");
+  modLog(FH_LOG_INFO, "v1.1.0 loaded");
   return FH_MOD_OK;
 }
 

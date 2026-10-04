@@ -1,7 +1,7 @@
 {
   "id": "com.saulob.fast-memory-card-loading",
   "name": "Fast Memory Card Loading",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "saulob",
   "description": "Removes the original Memory Card loading screen delay, making Memory Card access start immediately",
   "compatibility": {
