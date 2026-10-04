@@ -29,11 +29,14 @@ jobs:
             configure: -G Ninja -DCMAKE_BUILD_TYPE=Release
             library: mod.so
             file_pattern: 'ELF 64-bit LSB shared object, x86-64'
+            allowed_needed: libc.so.6
           - platform: linux-arm64
             os: ubuntu-24.04-arm
             configure: -G Ninja -DCMAKE_BUILD_TYPE=Release
             library: mod.so
             file_pattern: 'ELF 64-bit LSB shared object, ARM aarch64'
+            # Ubuntu's aarch64 toolchain records the dynamic loader as a NEEDED entry.
+            allowed_needed: libc.so.6 ld-linux-aarch64.so.1
           - platform: macos-arm64
             os: macos-latest
             configure: -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
@@ -106,7 +109,13 @@ jobs:
           readelf -h "$LIB" | grep -E 'Class|Machine'
           readelf -d "$LIB"
           needed="$(readelf -d "$LIB" | sed -n 's/.*(NEEDED).*\[\(.*\)\]/\1/p')"
-          [ "$needed" = "libc.so.6" ] || { echo "unexpected NEEDED: $needed"; exit 1; }
+          [ -n "$needed" ] || { echo "no NEEDED entries found"; exit 1; }
+          for dep in $needed; do
+            case " ${{ matrix.allowed_needed }} " in
+              *" $dep "*) echo "allowed NEEDED: $dep" ;;
+              *) echo "unexpected NEEDED: $dep (allowed: ${{ matrix.allowed_needed }})"; exit 1 ;;
+            esac
+          done
           if readelf -d "$LIB" | grep -E 'RPATH|RUNPATH'; then echo "unexpected RPATH/RUNPATH"; exit 1; fi
           ldd "$LIB"
           nm -D --undefined-only "$LIB"
